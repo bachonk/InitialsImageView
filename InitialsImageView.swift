@@ -17,7 +17,7 @@ extension UIImageView {
     public func setImageForName(string: String, backgroundColor: UIColor?, circular: Bool, textAttributes: [String: AnyObject]?) {
         
         let initials: String = initialsFromString(string: string)
-        let color: UIColor = (backgroundColor != nil) ? backgroundColor! : randomColor()
+        let color: UIColor = (backgroundColor != nil) ? backgroundColor! : randomColor(for: string)
         let attributes: [String: AnyObject] = (textAttributes != nil) ? textAttributes! : [
             NSFontAttributeName: self.fontForFontName(name: nil),
             NSForegroundColorAttributeName: UIColor.white
@@ -123,11 +123,12 @@ private func initialsFromString(string: String) -> String {
 
 private func randomColorComponent() -> Int {
     let limit = kColorMaxComponent - kColorMinComponent
-    
-    return kColorMinComponent + Int(arc4random_uniform(UInt32(limit)))
+    return kColorMinComponent + Int(drand48() * Double(limit))
 }
 
-private func randomColor() -> UIColor {
+private func randomColor(for string: String) -> UIColor {
+    srand48(string.hashValue)
+
     let red = CGFloat(randomColorComponent()) / 255.0
     let green = CGFloat(randomColorComponent()) / 255.0
     let blue = CGFloat(randomColorComponent()) / 255.0
