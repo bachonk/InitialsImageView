@@ -12,18 +12,35 @@ let kFontResizingProportion: CGFloat = 0.4
 let kColorMinComponent: Int = 30
 let kColorMaxComponent: Int = 214
 
+public typealias GradientColors = (top: UIColor, bottom: UIColor)
+
+typealias GradientOffset = (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)
+let kGradientTopOffset: GradientOffset = (hue: -0.025, saturation: 0.05, brightness: 0, alpha: 0)
+let kGradientBotomOffset: GradientOffset = (hue: 0.025, saturation: -0.05, brightness: 0, alpha: 0)
+
 extension UIImageView {
     
-    public func setImageForName(string: String, backgroundColor: UIColor?, circular: Bool, textAttributes: [String: AnyObject]?) {
+    public func setImageForName(string: String, backgroundColor: UIColor? = nil, circular: Bool, textAttributes: [String: AnyObject]?, gradient: Bool = false) {
+        
+        setImageForName(string: string, backgroundColor: backgroundColor, circular: circular, textAttributes: textAttributes, gradient: gradient, gradientColors: nil)
+    }
+    
+    public func setImageForName(string: String, gradientColors: GradientColors, circular: Bool, textAttributes: [String: AnyObject]?) {
+        
+        setImageForName(string: string, backgroundColor: nil, circular: circular, textAttributes: textAttributes, gradient: true, gradientColors: gradientColors)
+    }
+    
+    private func setImageForName(string: String, backgroundColor: UIColor?, circular: Bool, textAttributes: [String: AnyObject]?, gradient: Bool = false, gradientColors: GradientColors?) {
         
         let initials: String = initialsFromString(string: string)
         let color: UIColor = (backgroundColor != nil) ? backgroundColor! : randomColor(for: string)
+        let gradientColors = gradientColors ?? twoColors(from: color)
         let attributes: [String: AnyObject] = (textAttributes != nil) ? textAttributes! : [
             NSFontAttributeName: self.fontForFontName(name: nil),
             NSForegroundColorAttributeName: UIColor.white
         ]
         
-        self.image = imageSnapshot(text: initials, backgroundColor: color, circular: circular, textAttributes: attributes)
+        self.image = imageSnapshot(text: initials, backgroundColor: color, circular: circular, textAttributes: attributes, gradient: gradient, gradientColors: gradientColors)
     }
     
     private func fontForFontName(name: String?) -> UIFont {
@@ -38,7 +55,7 @@ extension UIImageView {
         
     }
     
-    private func imageSnapshot(text imageText: String, backgroundColor: UIColor, circular: Bool, textAttributes: [String : AnyObject]) -> UIImage {
+    private func imageSnapshot(text imageText: String, backgroundColor: UIColor, circular: Bool, textAttributes: [String : AnyObject], gradient: Bool, gradientColors: GradientColors) -> UIImage {
         
         let scale: CGFloat = UIScreen.main.scale
         
@@ -63,9 +80,21 @@ extension UIImageView {
             context.clip()
         }
         
-        // Fill background of context
-        context.setFillColor(backgroundColor.cgColor)
-        context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        if gradient {
+            // Draw a gradient from the top to the bottom
+            let baseSpace = CGColorSpaceCreateDeviceRGB()
+            let colors = [gradientColors.top.cgColor, gradientColors.bottom.cgColor]
+            let gradient = CGGradient(colorsSpace: baseSpace, colors: colors as CFArray, locations: nil)!
+            
+            let startPoint = CGPoint(x: self.bounds.midX, y: self.bounds.minY)
+            let endPoint = CGPoint(x: self.bounds.midX, y: self.bounds.maxY)
+            
+            context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: CGGradientDrawingOptions(rawValue: 0))
+        } else {
+            // Fill background of context
+            context.setFillColor(backgroundColor.cgColor)
+            context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        }
         
         // Draw text in the context
         let textSize: CGSize = imageText.size(attributes: textAttributes)
@@ -134,4 +163,31 @@ private func randomColor(for string: String) -> UIColor {
     let blue = CGFloat(randomColorComponent()) / 255.0
     
     return UIColor(red: red, green: green, blue: blue, alpha: 1.0)
+}
+
+private func clampColorComponent(_ value: CGFloat) -> CGFloat {
+    return min(max(value, 0), 1)
+}
+
+private func correct(color: UIColor, with offset: GradientOffset) -> UIColor {
+    
+    var hue = CGFloat(0)
+    var saturation = CGFloat(0)
+    var brightness = CGFloat(0)
+    var alpha = CGFloat(0)
+    if color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
+        hue = clampColorComponent(hue + offset.hue)
+        saturation = clampColorComponent(saturation + offset.saturation)
+        brightness = clampColorComponent(brightness + offset.brightness)
+        alpha = clampColorComponent(alpha + offset.alpha)
+        return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: alpha)
+    }
+    
+    return color
+}
+
+private func twoColors(from color: UIColor) -> GradientColors {
+    let topColor = correct(color: color, with: kGradientTopOffset)
+    let bottomColor = correct(color: color, with: kGradientBotomOffset)
+    return (top: topColor, bottom: bottomColor)
 }

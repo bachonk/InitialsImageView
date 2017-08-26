@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         let randomImage: UIImageView = UIImageView.init(frame: CGRect(x: self.view.bounds.midX - 40, y: self.view.bounds.midY - 80 - 40, width: 80, height: 80))
         self.view.addSubview(randomImage)
         
-        randomImage.setImageForName(string: "Hello World", backgroundColor: nil, circular: true, textAttributes: nil)
+        randomImage.setImageForName(string: "Hello World", circular: true, textAttributes: nil, gradient: true)
         
         // More specific option with bg color and font specified
         let customImage: UIImageView = UIImageView.init(frame: CGRect(x: self.view.bounds.midX - 40, y: self.view.bounds.midY + 40, width: 80, height: 80))
