@@ -14,9 +14,9 @@ let kColorMaxComponent: Int = 214
 
 public typealias GradientColors = (top: UIColor, bottom: UIColor)
 
-typealias GradientOffset = (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)
-let kGradientTopOffset: GradientOffset = (hue: -0.025, saturation: 0.05, brightness: 0, alpha: 0)
-let kGradientBotomOffset: GradientOffset = (hue: 0.025, saturation: -0.05, brightness: 0, alpha: 0)
+typealias HSVOffset = (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)
+let kGradientTopOffset: HSVOffset = (hue: -0.025, saturation: 0.05, brightness: 0, alpha: 0)
+let kGradientBotomOffset: HSVOffset = (hue: 0.025, saturation: -0.05, brightness: 0, alpha: 0)
 
 extension UIImageView {
     
@@ -34,7 +34,7 @@ extension UIImageView {
         
         let initials: String = initialsFromString(string: string)
         let color: UIColor = (backgroundColor != nil) ? backgroundColor! : randomColor(for: string)
-        let gradientColors = gradientColors ?? twoColors(from: color)
+        let gradientColors = gradientColors ?? topAndBottomColors(for: color)
         let attributes: [String: AnyObject] = (textAttributes != nil) ? textAttributes! : [
             NSFontAttributeName: self.fontForFontName(name: nil),
             NSForegroundColorAttributeName: UIColor.white
@@ -169,7 +169,7 @@ private func clampColorComponent(_ value: CGFloat) -> CGFloat {
     return min(max(value, 0), 1)
 }
 
-private func correct(color: UIColor, with offset: GradientOffset) -> UIColor {
+private func correctColorComponents(of color: UIColor, withHSVOffset offset: HSVOffset) -> UIColor {
     
     var hue = CGFloat(0)
     var saturation = CGFloat(0)
@@ -186,8 +186,8 @@ private func correct(color: UIColor, with offset: GradientOffset) -> UIColor {
     return color
 }
 
-private func twoColors(from color: UIColor) -> GradientColors {
-    let topColor = correct(color: color, with: kGradientTopOffset)
-    let bottomColor = correct(color: color, with: kGradientBotomOffset)
+private func topAndBottomColors(for color: UIColor, withTopHSVOffset topHSVOffset: HSVOffset = kGradientTopOffset, withBottomHSVOffset bottomHSVOffset: HSVOffset = kGradientBotomOffset) -> GradientColors {
+    let topColor = correctColorComponents(of: color, withHSVOffset: topHSVOffset)
+    let bottomColor = correctColorComponents(of: color, withHSVOffset: bottomHSVOffset)
     return (top: topColor, bottom: bottomColor)
 }
