@@ -1,6 +1,6 @@
 //
 //  InitialsImageView.swift
-//  
+//
 //
 //  Created by Tom Bachant on 1/28/17.
 //
@@ -14,13 +14,13 @@ let kColorMaxComponent: Int = 214
 
 extension UIImageView {
     
-    public func setImageForName(string: String, backgroundColor: UIColor?, circular: Bool, textAttributes: [String: AnyObject]?) {
+    public func setImageForName(string: String, backgroundColor: UIColor?, circular: Bool, textAttributes: [NSAttributedStringKey: AnyObject]?) {
         
         let initials: String = initialsFromString(string: string)
         let color: UIColor = (backgroundColor != nil) ? backgroundColor! : randomColor(for: string)
-        let attributes: [String: AnyObject] = (textAttributes != nil) ? textAttributes! : [
-            NSFontAttributeName: self.fontForFontName(name: nil),
-            NSForegroundColorAttributeName: UIColor.white
+        let attributes: [NSAttributedStringKey: AnyObject] = (textAttributes != nil) ? textAttributes! : [
+            NSAttributedStringKey.font: self.fontForFontName(name: nil),
+            NSAttributedStringKey.foregroundColor: UIColor.white
         ]
         
         self.image = imageSnapshot(text: initials, backgroundColor: color, circular: circular, textAttributes: attributes)
@@ -31,14 +31,13 @@ extension UIImageView {
         let fontSize = self.bounds.width * kFontResizingProportion;
         if name != nil {
             return UIFont(name: name!, size: fontSize)!
-        }
-        else {
+        } else {
             return UIFont.systemFont(ofSize: fontSize)
         }
         
     }
     
-    private func imageSnapshot(text imageText: String, backgroundColor: UIColor, circular: Bool, textAttributes: [String : AnyObject]) -> UIImage {
+    private func imageSnapshot(text imageText: String, backgroundColor: UIColor, circular: Bool, textAttributes: [NSAttributedStringKey: AnyObject]) -> UIImage {
         
         let scale: CGFloat = UIScreen.main.scale
         
@@ -68,7 +67,7 @@ extension UIImageView {
         context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
         
         // Draw text in the context
-        let textSize: CGSize = imageText.size(attributes: textAttributes)
+        let textSize: CGSize = imageText.size(withAttributes: textAttributes)
         let bounds: CGRect = self.bounds
         
         imageText.draw(in: CGRect(x: bounds.midX - textSize.width / 2,
@@ -97,7 +96,7 @@ private func initialsFromString(string: String) -> String {
             let range: Range<String.Index> = firstWord.startIndex..<firstWord.index(firstWord.startIndex, offsetBy: 1)
             let firstLetterRange: Range = firstWord.rangeOfComposedCharacterSequences(for: range)
             
-            displayString.append(firstWord.substring(with: firstLetterRange).uppercased())
+            displayString.append(firstWord[firstLetterRange].uppercased())
         }
         
         if words.count >= 2 {
@@ -113,7 +112,7 @@ private func initialsFromString(string: String) -> String {
                 let range: Range<String.Index> = lastWord.startIndex..<lastWord.index(lastWord.startIndex, offsetBy: 1)
                 let lastLetterRange: Range = lastWord.rangeOfComposedCharacterSequences(for: range)
                 
-                displayString.append(lastWord.substring(with: lastLetterRange).uppercased())
+                displayString.append(firstWord[lastLetterRange].uppercased())
             }
         }
     }
@@ -128,7 +127,7 @@ private func randomColorComponent() -> Int {
 
 private func randomColor(for string: String) -> UIColor {
     srand48(string.hashValue)
-
+    
     let red = CGFloat(randomColorComponent()) / 255.0
     let green = CGFloat(randomColorComponent()) / 255.0
     let blue = CGFloat(randomColorComponent()) / 255.0
