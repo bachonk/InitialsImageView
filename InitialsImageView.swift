@@ -115,7 +115,7 @@ extension UIImageView {
 
 private func initialsFromString(string: String) -> String { 
     return string.components(separatedBy: .whitespacesAndNewlines).reduce("") { 
-        ($0.isEmpty ? "" : "\($0.first!)") + ($1.isEmpty ? "" : "\($1.first!)") }
+        ($0.isEmpty ? "" : "\($0.uppercased().first!)") + ($1.isEmpty ? "" : "\($1.uppercased().first!)") }
 }
 
 private func randomColorComponent() -> Int {
