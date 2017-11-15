@@ -113,41 +113,10 @@ extension UIImageView {
     }
 }
 
-private func initialsFromString(string: String) -> String {
-    
-    var displayString: String = ""
-    var words: [String] = string.components(separatedBy: .whitespacesAndNewlines)
-    
-    // Get first letter of the first and last word
-    if words.count > 0 {
-        let firstWord: String = words.first!
-        if firstWord.characters.count > 0 {
-            // Get character range to handle emoji (emojis consist of 2 characters in sequence)
-            let range: Range<String.Index> = firstWord.startIndex..<firstWord.index(firstWord.startIndex, offsetBy: 1)
-            let firstLetterRange: Range = firstWord.rangeOfComposedCharacterSequences(for: range)
-            
-            displayString.append(firstWord[firstLetterRange].uppercased())
-        }
-        
-        if words.count >= 2 {
-            var lastWord: String = words.last!
-            
-            while lastWord.characters.count == 0 && words.count >= 2 {
-                words.removeLast()
-                lastWord = words.last!
-            }
-            
-            if words.count > 1 {
-                // Get character range to handle emoji (emojis consist of 2 characters in sequence)
-                let range: Range<String.Index> = lastWord.startIndex..<lastWord.index(lastWord.startIndex, offsetBy: 1)
-                let lastLetterRange: Range = lastWord.rangeOfComposedCharacterSequences(for: range)
-                
-                displayString.append(lastWord[lastLetterRange].uppercased())
-            }
-        }
+private func initialsFromString(string: String) -> String { 
+    return string.components(separatedBy: .whitespacesAndNewlines).reduce("") { 
+        ($0.isEmpty ? "" : "\($0.uppercased().first!)") + ($1.isEmpty ? "" : "\($1.uppercased().first!)") 
     }
-    
-    return displayString
 }
 
 private func randomColorComponent() -> Int {
