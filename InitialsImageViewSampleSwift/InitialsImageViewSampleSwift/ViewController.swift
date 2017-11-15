@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         let customImage: UIImageView = UIImageView.init(frame: CGRect(x: self.view.bounds.midX - 40, y: self.view.bounds.midY + 40, width: 80, height: 80))
         self.view.addSubview(customImage)
         
-        customImage.setImageForName(string: "Custom Font", backgroundColor: .blue, circular: true, textAttributes: [NSFontAttributeName: UIFont(name: "AmericanTypewriter-Bold", size: 30)!, NSForegroundColorAttributeName: UIColor.init(white: 1.0, alpha: 0.5)])
+        customImage.setImageForName(string: "Custom Font", backgroundColor: .blue, circular: true, textAttributes: [NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): UIFont(name: "AmericanTypewriter-Bold", size: 30)!, NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.init(white: 1.0, alpha: 0.5)])
         
     }
 
