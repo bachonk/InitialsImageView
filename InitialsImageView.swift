@@ -20,17 +20,17 @@ let kGradientBotomOffset: HSVOffset = (hue: 0.025, saturation: -0.05, brightness
 
 extension UIImageView {
     
-    public func setImageForName(string: String, backgroundColor: UIColor? = nil, circular: Bool, textAttributes: [NSAttributedStringKey: AnyObject]?, gradient: Bool = false) {
+    public func setImageForName(_ string: String, backgroundColor: UIColor? = nil, circular: Bool, textAttributes: [NSAttributedStringKey: AnyObject]?, gradient: Bool = false) {
         
-        setImageForName(string: string, backgroundColor: backgroundColor, circular: circular, textAttributes: textAttributes, gradient: gradient, gradientColors: nil)
+        setImageForName(string, backgroundColor: backgroundColor, circular: circular, textAttributes: textAttributes, gradient: gradient, gradientColors: nil)
     }
     
-    public func setImageForName(string: String, gradientColors: GradientColors, circular: Bool, textAttributes: [NSAttributedStringKey: AnyObject]?) {
+    public func setImageForName(_ string: String, gradientColors: GradientColors, circular: Bool, textAttributes: [NSAttributedStringKey: AnyObject]?) {
         
-        setImageForName(string: string, backgroundColor: nil, circular: circular, textAttributes: textAttributes, gradient: true, gradientColors: gradientColors)
+        setImageForName(string, backgroundColor: nil, circular: circular, textAttributes: textAttributes, gradient: true, gradientColors: gradientColors)
     }
     
-    private func setImageForName(string: String, backgroundColor: UIColor?, circular: Bool, textAttributes: [NSAttributedStringKey: AnyObject]?, gradient: Bool = false, gradientColors: GradientColors?) {
+    private func setImageForName(_ string: String, backgroundColor: UIColor?, circular: Bool, textAttributes: [NSAttributedStringKey: AnyObject]?, gradient: Bool = false, gradientColors: GradientColors?) {
         
         let initials: String = initialsFromString(string: string)
         let color: UIColor = (backgroundColor != nil) ? backgroundColor! : randomColor(for: string)
