@@ -45,7 +45,7 @@ randomImage.setImageForName(string: "Michael Bluth", backgroundColor: nil, circu
 
 ### Saying Thanks
 
-If you like this tool, show your support by downloading the free [Reach Contact List](https://itunes.apple.com/us/app/reach-your-contact-list/id898802540?mt=8) app that inspired it!
+If you like this tool, show your support by downloading the free [Turnout](https://itunes.apple.com/us/app/turnout-make-plans-w-friends/id1393733205?mt=8) app that inspired it!
 
 ### License
 
