@@ -12,4 +12,5 @@ Pod::Spec.new do |s|
                :tag => '0.3.0' }
   s.source_files  = 'InitialsImageView.swift'
   s.requires_arc = true
+  s.swift_version = '4.0'
 end
