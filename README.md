@@ -3,7 +3,7 @@ InitialsImageView
 
 An easy, helpful UIImageView extension that generates letter initials as a placeholder for user profile images, with a randomized background color
 
-![Example screenshot](http://i.imgur.com/xSBjVQ7.png)
+![Example screenshot](https://i.imgur.com/KE8OfrL.png)
 
 ### Installation
 
