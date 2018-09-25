@@ -36,8 +36,8 @@ extension UIImageView {
         let color: UIColor = (backgroundColor != nil) ? backgroundColor! : randomColor(for: string)
         let gradientColors = gradientColors ?? topAndBottomColors(for: color)
         let attributes: [NSAttributedString.Key: AnyObject] = (textAttributes != nil) ? textAttributes! : [
-            NSAttributedStringKey.font: self.fontForFontName(name: nil),
-            NSAttributedStringKey.foregroundColor: UIColor.white
+            NSAttributedString.Key.font: self.fontForFontName(name: nil),
+            NSAttributedString.Key.foregroundColor: UIColor.white
         ]
         
         self.image = imageSnapshot(text: initials, backgroundColor: color, circular: circular, textAttributes: attributes, gradient: gradient, gradientColors: gradientColors)
