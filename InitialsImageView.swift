@@ -113,10 +113,13 @@ extension UIImageView {
     }
 }
 
-private func initialsFromString(string: String) -> String { 
-    return string.components(separatedBy: .whitespacesAndNewlines).reduce("") { 
-        ($0.isEmpty ? "" : "\($0.uppercased().first!)") + ($1.isEmpty ? "" : "\($1.uppercased().first!)") 
-    }
+private func initialsFromString(string: String) -> String {
+    var nameComponents = string.uppercased().components(separatedBy: CharacterSet.letters.inverted)
+    nameComponents.removeAll(where: {$0.isEmpty})
+    
+    let firstInitial = nameComponents.first?.first
+    let lastInitial  = nameComponents.count > 1 ? nameComponents.last?.first : nil
+    return (firstInitial != nil ? "\(firstInitial!)" : "") + (lastInitial != nil ? "\(lastInitial!)" : "")
 }
 
 private func randomColorComponent() -> Int {
