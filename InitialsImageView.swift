@@ -45,14 +45,10 @@ extension UIImageView {
     
     private func fontForFontName(name: String?) -> UIFont {
         
-        let fontSize = self.bounds.width * kFontResizingProportion;
-        if name != nil {
-            return UIFont(name: name!, size: fontSize)!
-        }
-        else {
-            return UIFont.systemFont(ofSize: fontSize)
-        }
-        
+        let fontSize = self.bounds.width * kFontResizingProportion
+        guard let name = name else { return .systemFont(ofSize: fontSize) }
+        guard let customFont = UIFont(name: name, size: fontSize) else { return .systemFont(ofSize: fontSize) }
+        return customFont
     }
     
     private func imageSnapshot(text imageText: String, backgroundColor: UIColor, circular: Bool, textAttributes: [NSAttributedString.Key : AnyObject], gradient: Bool, gradientColors: GradientColors) -> UIImage {
@@ -71,7 +67,7 @@ extension UIImageView {
         
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         
-        let context: CGContext = UIGraphicsGetCurrentContext()!
+        guard let context: CGContext = UIGraphicsGetCurrentContext() else { return UIImage() }
         
         if circular {
             // Clip context to a circle
@@ -84,12 +80,13 @@ extension UIImageView {
             // Draw a gradient from the top to the bottom
             let baseSpace = CGColorSpaceCreateDeviceRGB()
             let colors = [gradientColors.top.cgColor, gradientColors.bottom.cgColor]
-            let gradient = CGGradient(colorsSpace: baseSpace, colors: colors as CFArray, locations: nil)!
             
-            let startPoint = CGPoint(x: self.bounds.midX, y: self.bounds.minY)
-            let endPoint = CGPoint(x: self.bounds.midX, y: self.bounds.maxY)
-            
-            context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: CGGradientDrawingOptions(rawValue: 0))
+            if let gradient = CGGradient(colorsSpace: baseSpace, colors: colors as CFArray, locations: nil) {
+                let startPoint = CGPoint(x: self.bounds.midX, y: self.bounds.minY)
+                let endPoint = CGPoint(x: self.bounds.midX, y: self.bounds.maxY)
+                
+                context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: CGGradientDrawingOptions(rawValue: 0))
+            }
         } else {
             // Fill background of context
             context.setFillColor(backgroundColor.cgColor)
@@ -106,10 +103,10 @@ extension UIImageView {
                                   height: textSize.height),
                        withAttributes: textAttributes)
         
-        let snapshot: UIImage = UIGraphicsGetImageFromCurrentImageContext()!;
-        UIGraphicsEndImageContext();
+        guard let snapshot: UIImage = UIGraphicsGetImageFromCurrentImageContext() else { return UIImage() }
+        UIGraphicsEndImageContext()
         
-        return snapshot;
+        return snapshot
     }
 }
 
