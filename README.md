@@ -15,6 +15,16 @@ Add this spec to your podfile:
 
 Check out the [official guide](http://guides.cocoapods.org/using/index.html) for getting started with CocoaPods.
 
+##### Swift Package Manager
+
+You can use the [Swift Package Manager](https://swift.org/package-manager/) to install `InitialsImageView` by adding it to the `dependencies` value of your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/bachonk/InitialsImageView.git", .upToNextMajor(from: "0.0.0"))
+]
+```
+
 ##### Manual
 
 1. Drag the `InitialsImageView.swift` file into your project
