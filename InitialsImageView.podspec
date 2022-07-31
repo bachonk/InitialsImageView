@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.author       = { "Tom Bachant" => "tom@dashride.com" }
   s.platform     = :ios, '8.0'
   s.source = { :git => "https://github.com/bachonk/InitialsImageView.git",
-               :tag => '0.7.0' }
+               :tag => '0.8.0' }
   s.source_files  = 'InitialsImageView.swift'
   s.requires_arc = true
   s.swift_version = '5.0'
